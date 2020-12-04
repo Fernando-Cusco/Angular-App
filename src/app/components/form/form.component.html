@@ -1,33 +1,57 @@
 <div class="card bg-dark text-white">
     <div class="card-header">{{ titulo }}</div>
     <div class="card-body">
-        <form>
+        <form #form="ngForm">
             <div class="form-group row">
                 <label for="nombres" class="col-form-label col-sm-2">Nombres</label>
                 <div class="col-sm-6">
-                    <input class="form-control" type="text" [(ngModel)]="cliente.nombres" name="nombres"/>
+                    <input class="form-control" type="text" [(ngModel)]="cliente.nombres" name="nombres" required minlength="2" #nombres="ngModel"/>
+                    <div class="alert alert-danger" *ngIf="nombres.invalid && (nombres.dirty || nombres.touched)">
+                        <div *ngIf="nombres.errors.required">
+                            Nombres son requerido.
+                        </div>
+                        <div *ngIf="nombres.errors.minlength">
+                            Nombres debe tener 2 letras minimo.
+                        </div>
+                    </div>
                 </div>
             </div>
             
             <div class="form-group row">
                 <label for="apellidos" class="col-form-label col-sm-2">Apellidos</label>
                 <div class="col-sm-6">
-                    <input class="form-control" type="text" [(ngModel)]="cliente.apellidos" name="apellidos"/>
+                    <input class="form-control" type="text" [(ngModel)]="cliente.apellidos" name="apellidos" required minlength="2" #apellidos="ngModel"/>
+                    <div class="alert alert-danger" *ngIf="apellidos.invalid && (apellidos.dirty || apellidos.touched)">
+                        <div *ngIf="apellidos.errors.required">
+                            Apellidos son requerido.
+                        </div>
+                        <div *ngIf="apellidos.errors.minlength">
+                            Apellidos debe tener 2 letras minimo.
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label for="email" class="col-form-label col-sm-2">Email</label>
                 <div class="col-sm-6">
-                    <input class="form-control" type="text" [(ngModel)]="cliente.email" name="email"/>
+                    <input class="form-control" type="text" [(ngModel)]="cliente.email" name="email" required email #email="ngModel"/>
+                    <div class="alert alert-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
+                        <div *ngIf="email.errors.required">
+                            Email es requerido.
+                        </div>
+                        <div *ngIf="email.errors.email">
+                            Email no es valido.
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-sm-6">
-                    <button class="btn btn-primary" role="button" (click)="crear()" *ngIf="!cliente.id else elseBlock">Crear</button>
+                    <button class="btn btn-primary" role="button" (click)="crear()" *ngIf="!cliente.id else elseBlock" [disabled]="!form.form.valid">Crear</button>
                     <ng-template #elseBlock>
-                        <button class="btn btn-primary" role="button" (click)="actualizarCliente()">Actualizar</button>
+                        <button class="btn btn-primary" role="button" (click)="actualizarCliente()" [disabled]="!form.form.valid">Actualizar</button>
                     </ng-template>
                     
                 </div>
